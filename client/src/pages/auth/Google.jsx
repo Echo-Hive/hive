@@ -28,7 +28,7 @@ function GoogleButton() {
     onError: handleResponse,
     flow: "auth-code",
     scope:
-      "https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/documents",
+      "https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.readonly",
   });
   return (
     <div className="w-screen h-screen bg-amber-100 flex items-center justify-center">
