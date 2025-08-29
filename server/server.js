@@ -1,9 +1,11 @@
 import dotenv from "dotenv";
 import app from "./app.js";
 
-dotenv.config({ path: "./.env" });
-
+dotenv.config();
 const PORT = process.env.PORT || 8080;
+
+import connectDb from "./config/dbConfig.js";
+connectDb();
 app.listen(PORT, () => {
   if ((process.env.NODE_ENV = "development")) {
     console.log(`server is running on port ${PORT} ...`);

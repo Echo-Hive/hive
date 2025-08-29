@@ -1,4 +1,5 @@
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 // console.log(GOOGLE_CLIENT_ID);
@@ -43,13 +44,13 @@ function GoogleButton() {
 
 async function googleAuthHandler(code) {
   alert(code);
-  //   await axios.post(
-  //     `${VITE_BACKEND_URL}/auth/google`,
-  //     {
-  //       code,
-  //     },
-  //     {
-  //       withCredentials: true,
-  //     }
-  //   );
+  await axios.post(
+    `${VITE_BACKEND_URL}/auth/google`,
+    {
+      code,
+    },
+    {
+      withCredentials: true,
+    }
+  );
 }
