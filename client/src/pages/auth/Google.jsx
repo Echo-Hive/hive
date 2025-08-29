@@ -1,7 +1,7 @@
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
-const GOOGLE_CLIENT_ID = import.meta.env;
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-console.log(GOOGLE_CLIENT_ID);
+// console.log(GOOGLE_CLIENT_ID);
 
 function Google() {
   return (
@@ -26,6 +26,8 @@ function GoogleButton() {
     onSuccess: handleResponse,
     onError: handleResponse,
     flow: "auth-code",
+    scope:
+      "https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/documents",
   });
   return (
     <div className="w-screen h-screen bg-amber-100 flex items-center justify-center">
