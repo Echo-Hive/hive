@@ -9,6 +9,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="*" element={<div>NOT FOUND: 404</div>} />
       </Routes>
     </BrowserRouter>
   );
