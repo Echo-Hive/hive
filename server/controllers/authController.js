@@ -1,12 +1,14 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import User from "../models/User.js";
+import { getAllDocsWithContent } from "../services/googleDocs.js";
 
 dotenv.config();
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
-const REDIRECT_URI = "http://localhost:5173";
-// console.log(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+const oauth2Client = {
+  client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
+  client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+  redirect_uri: "http://localhost:5173",
+};
 
 export const googleAuth = async (req, res) => {
   try {
@@ -16,16 +18,16 @@ export const googleAuth = async (req, res) => {
       "https://oauth2.googleapis.com/token",
       {
         code,
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: GOOGLE_CLIENT_SECRET,
-        redirect_uri: REDIRECT_URI,
+        client_id: oauth2Client.client_id,
+        client_secret: oauth2Client.client_secret,
+        redirect_uri: oauth2Client.redirect_uri,
         grant_type: "authorization_code",
       }
     );
 
     const { access_token, refresh_token, expires_in } = tokenResponse.data;
 
-    console.log(refresh_token);
+    // console.log(refresh_token);
 
     const userInfoResponse = await axios.get(
       "https://www.googleapis.com/oauth2/v2/userinfo",
@@ -76,23 +78,18 @@ export const refreshToken = async (req, res) => {
     }
 
     const response = await axios.post("https://oauth2.googleapis.com/token", {
-      client_id: GOOGLE_CLIENT_ID,
-      client_secret: GOOGLE_CLIENT_SECRET,
+      client_id: oauth2Client.client_id,
+      client_secret: oauth2Client.client_secret,
       refresh_token,
       grant_type: "refresh_token",
     });
     const { access_token: accessToken } = response.data;
-    const docs = await axios.get("https://www.googleapis.com/drive/v3/files", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: {
-        q: "mimeType='application/vnd.google-apps.document'",
-        fields: "files(id, name, createdTime, modifiedTime, webViewLink)",
-      },
-    });
+    const results = await getAllDocsWithContent(accessToken);
 
-    res.json({ files: docs.data.files });
+    res.status(200).json({
+      status: "success",
+      docs: results,
+    });
   } catch (err) {
     res.status(500).json({ error: "Failed to refresh token" });
   }

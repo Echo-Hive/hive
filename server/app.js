@@ -1,5 +1,5 @@
 import express from "express";
-import googleRoutes from "./routes/googleRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import cors from "cors";
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(
   })
 );
 
-app.use("/auth", googleRoutes);
+app.use("/auth", authRoutes);
 
 app.all("*all", (req, res) => {
   res.status(404).send("not found");
