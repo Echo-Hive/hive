@@ -4,18 +4,11 @@ import User from "../models/User.js";
 import { getAllDocsWithContent } from "../services/googleDocs.js";
 
 dotenv.config();
-<<<<<<< HEAD
 const oauth2Client = {
   client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
   client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
   redirect_uri: "http://localhost:5173",
 };
-=======
-
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
-const REDIRECT_URI = "http://localhost:5173";
->>>>>>> a405863a198bf03e6ac0e980e1d63044021e93e8
 
 export const googleAuth = async (req, res) => {
   try {
@@ -90,7 +83,6 @@ export const refreshToken = async (req, res) => {
       refresh_token,
       grant_type: "refresh_token",
     });
-<<<<<<< HEAD
     const { access_token: accessToken } = response.data;
     const results = await getAllDocsWithContent(accessToken);
 
@@ -98,38 +90,6 @@ export const refreshToken = async (req, res) => {
       status: "success",
       docs: results,
     });
-=======
-    // const { access_token: accessToken } = response.data;
-    // const docs = await axios.get("https://www.googleapis.com/drive/v3/files", {
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`,
-    //   },
-    //   params: {
-    //     q: "mimeType='application/vnd.google-apps.document'",
-    //     fields: "files(id, name, createdTime, modifiedTime, webViewLink)",
-    //   },
-    // });
-
-    const { access_token: accessToken } = response.data;
-
-    const docsResponse = await axios.get(
-      "https://www.googleapis.com/drive/v3/files",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          q: "mimeType='application/vnd.google-apps.document'",
-          fields:
-            "files(id, name, createdTime, modifiedTime, owners, webViewLink)",
-        },
-      }
-    );
-
-    const docs = docsResponse.data.files;
-
-    res.json({ files: docsResponse.data.files });
->>>>>>> a405863a198bf03e6ac0e980e1d63044021e93e8
   } catch (err) {
     res.status(500).json({ error: "Failed to refresh token" });
   }
