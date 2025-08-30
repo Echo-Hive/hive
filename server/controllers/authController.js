@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 import User from "../models/User.js";
 
 dotenv.config();
+
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_OAUTH_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
 const REDIRECT_URI = "http://localhost:5173";
-// console.log(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
 export const googleAuth = async (req, res) => {
   try {
@@ -81,19 +81,36 @@ export const refreshToken = async (req, res) => {
       refresh_token,
       grant_type: "refresh_token",
     });
-    const { access_token: accessToken } = response.data;
-    const docs = await axios.get("https://www.googleapis.com/drive/v3/files", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: {
-        q: "mimeType='application/vnd.google-apps.document'",
-        fields:
-          "files(id, name, createdTime, modifiedTime, owners, webViewLink)",
-      },
-    });
+    // const { access_token: accessToken } = response.data;
+    // const docs = await axios.get("https://www.googleapis.com/drive/v3/files", {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    //   params: {
+    //     q: "mimeType='application/vnd.google-apps.document'",
+    //     fields: "files(id, name, createdTime, modifiedTime, webViewLink)",
+    //   },
+    // });
 
-    res.json({ files: docs.data.files });
+    const { access_token: accessToken } = response.data;
+
+    const docsResponse = await axios.get(
+      "https://www.googleapis.com/drive/v3/files",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          q: "mimeType='application/vnd.google-apps.document'",
+          fields:
+            "files(id, name, createdTime, modifiedTime, owners, webViewLink)",
+        },
+      }
+    );
+
+    const docs = docsResponse.data.files;
+
+    res.json({ files: docsResponse.data.files });
   } catch (err) {
     res.status(500).json({ error: "Failed to refresh token" });
   }
