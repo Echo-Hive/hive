@@ -88,8 +88,7 @@ export const refreshToken = async (req, res) => {
       },
       params: {
         q: "mimeType='application/vnd.google-apps.document'",
-        fields:
-          "files(id, name, createdTime, modifiedTime, owners, webViewLink)",
+        fields: "files(id, name, createdTime, modifiedTime, webViewLink)",
       },
     });
 
