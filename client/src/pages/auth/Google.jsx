@@ -31,14 +31,12 @@ function GoogleButton() {
       "https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.readonly",
   });
   return (
-    <div className="w-screen h-screen bg-amber-100 flex items-center justify-center">
-      <span
-        className="text-2xl font-bold px-4 py-2 bg-pink-500 text-white cursor-pointer hover:bg-pink-600"
-        onClick={googleLogin}
-      >
-        Google
-      </span>
-    </div>
+    <span
+      className="text-2xl font-bold px-4 py-2 bg-pink-500 text-white cursor-pointer hover:bg-pink-600"
+      onClick={googleLogin}
+    >
+      Google
+    </span>
   );
 }
 
